@@ -1,0 +1,14 @@
+
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/ylocr
+    driverClassName: com.mysql.cj.jdbc.Driver
+    username: ylocr
+    password: ylocr
+  jpa:
+    database: MYSQL
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+
