@@ -1,7 +1,7 @@
 package edu.neu.cpabe.demo.teacher;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -25,6 +25,7 @@ public class TeacherWork {
     @Column(columnDefinition = "TEXT")
     private String encContent;
 
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ", locale = "zh", timezone = "GMT+8")
     private Date deadline;
 
 

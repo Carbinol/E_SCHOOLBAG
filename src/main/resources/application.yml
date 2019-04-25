@@ -2,10 +2,10 @@
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/ylocr
+    url: jdbc:mysql://localhost:3306/e_schoolbag?serverTimezone=UTC
     driverClassName: com.mysql.cj.jdbc.Driver
-    username: ylocr
-    password: ylocr
+    username: ebag
+    password: ebag
   jpa:
     database: MYSQL
     hibernate:

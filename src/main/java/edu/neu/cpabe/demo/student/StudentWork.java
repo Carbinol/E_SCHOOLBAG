@@ -1,9 +1,7 @@
 package edu.neu.cpabe.demo.student;
 
-import edu.neu.cpabe.demo.teacher.Teacher;
 import edu.neu.cpabe.demo.teacher.TeacherWork;
 import lombok.Data;
-import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 import java.util.Date;

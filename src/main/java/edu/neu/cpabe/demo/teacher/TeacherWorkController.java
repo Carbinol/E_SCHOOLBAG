@@ -1,18 +1,12 @@
 package edu.neu.cpabe.demo.teacher;
 
-import edu.neu.cpabe.demo.encrypt.DemoEncryptUtilImpl;
+import edu.neu.cpabe.demo.encrypt.CpabeEncryptUtilImpl;
 import lombok.Data;
-import org.apache.commons.lang3.time.DateFormatUtils;
-import org.apache.commons.lang3.time.DateUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/teachers/work")
@@ -31,15 +25,21 @@ public class TeacherWorkController {
     @PostMapping
     public void uploadWork(@RequestBody TeacherWorkDTO teacherWorkDTO) throws ParseException {
         Teacher t = teacherRepository.findByTeacherId(teacherWorkDTO.getTeacherId()).orElseThrow(() -> new IllegalArgumentException("无此教师"));
-        DemoEncryptUtilImpl demoEncryptUtil = new DemoEncryptUtilImpl();
+        CpabeEncryptUtilImpl demoEncryptUtil = new CpabeEncryptUtilImpl();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         TeacherWork tw = TeacherWork.TeacherWorkBuilder.aTeacherWork()
                 .withTeacher(t)
                 .withPolicy(teacherWorkDTO.getPolicy())
                 .withDeadline(sdf.parse(teacherWorkDTO.getDeadline()))
-                .withEncContent(demoEncryptUtil.encrypt(teacherWorkDTO.getContent()))
+                .withEncContent(demoEncryptUtil.encrypt(teacherWorkDTO.getContent(),teacherWorkDTO.getPolicy()))
                 .build();
         teacherWorkRepository.save(tw);
+    }
+
+    @GetMapping("/{teacherId}")
+    public List<TeacherWork> findTeacherWork(@PathVariable String teacherId){
+        Teacher t = teacherRepository.findByTeacherId(teacherId).orElseThrow(() -> new IllegalArgumentException("无此教师"));
+        return teacherWorkRepository.findByTeacher(t);
     }
 
     @Data
