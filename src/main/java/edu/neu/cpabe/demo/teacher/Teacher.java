@@ -5,6 +5,7 @@ import lombok.Data;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
@@ -12,7 +13,9 @@ import java.util.Objects;
 @Entity
 @Table(name = "teacher")
 @Access(AccessType.FIELD)
-public class Teacher {
+public class Teacher implements Serializable {
+
+    private static final long serialVersionUID = -1273281813289480577L;
 
     @Id
     @GeneratedValue
