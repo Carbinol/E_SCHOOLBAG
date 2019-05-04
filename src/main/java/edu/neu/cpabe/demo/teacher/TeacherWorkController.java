@@ -1,6 +1,6 @@
 package edu.neu.cpabe.demo.teacher;
 
-import edu.neu.cpabe.demo.encrypt.CpabeEncryptUtilImpl;
+import edu.neu.cpabe.demo.encrypt.DemoEncryptUtilImpl;
 import lombok.Data;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,13 +25,13 @@ public class TeacherWorkController {
     @PostMapping
     public void uploadWork(@RequestBody TeacherWorkDTO teacherWorkDTO) throws ParseException {
         Teacher t = teacherRepository.findByTeacherId(teacherWorkDTO.getTeacherId()).orElseThrow(() -> new IllegalArgumentException("无此教师"));
-        CpabeEncryptUtilImpl demoEncryptUtil = new CpabeEncryptUtilImpl();
+        DemoEncryptUtilImpl demoEncryptUtil = new DemoEncryptUtilImpl();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         TeacherWork tw = TeacherWork.TeacherWorkBuilder.aTeacherWork()
                 .withTeacher(t)
                 .withPolicy(teacherWorkDTO.getPolicy())
                 .withDeadline(sdf.parse(teacherWorkDTO.getDeadline()))
-                .withEncContent(demoEncryptUtil.encrypt(teacherWorkDTO.getContent(),teacherWorkDTO.getPolicy()))
+                .withEncContent(demoEncryptUtil.encrypt(teacherWorkDTO.getContent()))
                 .build();
         teacherWorkRepository.save(tw);
     }
