@@ -2,6 +2,8 @@ package edu.neu.cpabe.demo.teacher;
 
 import edu.neu.cpabe.demo.encrypt.DemoEncryptUtilImpl;
 import lombok.Data;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
@@ -14,17 +16,14 @@ public class TeacherWorkController {
 
     private TeacherWorkRepository teacherWorkRepository;
 
-    private TeacherRepository teacherRepository;
-
-    public TeacherWorkController(TeacherWorkRepository teacherWorkRepository,
-                                 TeacherRepository teacherRepository) {
+    public TeacherWorkController(TeacherWorkRepository teacherWorkRepository) {
         this.teacherWorkRepository = teacherWorkRepository;
-        this.teacherRepository = teacherRepository;
     }
 
     @PostMapping
-    public void uploadWork(@RequestBody TeacherWorkDTO teacherWorkDTO) throws ParseException {
-        Teacher t = teacherRepository.findByTeacherId(teacherWorkDTO.getTeacherId()).orElseThrow(() -> new IllegalArgumentException("无此教师"));
+    @PreAuthorize("hasRole('TEACHER')")
+    public void uploadWork(@AuthenticationPrincipal(expression = "teacher") Teacher t,
+                           @RequestBody TeacherWorkDTO teacherWorkDTO) throws ParseException {
         DemoEncryptUtilImpl demoEncryptUtil = new DemoEncryptUtilImpl();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         TeacherWork tw = TeacherWork.TeacherWorkBuilder.aTeacherWork()
@@ -36,11 +35,32 @@ public class TeacherWorkController {
         teacherWorkRepository.save(tw);
     }
 
-    @GetMapping("/{teacherId}")
-    public List<TeacherWork> findTeacherWork(@PathVariable String teacherId){
-        Teacher t = teacherRepository.findByTeacherId(teacherId).orElseThrow(() -> new IllegalArgumentException("无此教师"));
-        return teacherWorkRepository.findByTeacher(t);
+    @GetMapping
+    @PreAuthorize("hasRole('TEACHER')")
+    public List<TeacherWork> findTeacherWork(@AuthenticationPrincipal(expression = "teacher") Teacher teacher) {
+        return teacherWorkRepository.findByTeacher(teacher);
     }
+
+    @PutMapping("/{teacherWorkId)")
+    @PreAuthorize("hasRole('TEACHER')")
+    public void modifyWork(@AuthenticationPrincipal(expression = "teacher") Teacher t,
+                           @RequestBody TeacherWorkDTO teacherWorkDTO,
+                           @PathVariable Long teacherWorkId) throws ParseException {
+        List<TeacherWork> byTeacher = teacherWorkRepository.findByTeacher(t);
+        TeacherWork tw = teacherWorkRepository.findById(teacherWorkId)
+                .orElseThrow(() -> new IllegalArgumentException("无此题目"));
+        if (byTeacher.stream().noneMatch(v -> v.equals(tw)))
+            throw new IllegalStateException("题目权限错误");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        if (teacherWorkDTO.getDeadline() != null)
+            tw.setDeadline(sdf.parse(teacherWorkDTO.getDeadline()));
+        if (teacherWorkDTO.getPolicy() != null)
+            tw.setPolicy(teacherWorkDTO.getPolicy());
+        if (teacherWorkDTO.getContent() != null)
+            tw.setEncContent(teacherWorkDTO.getContent());
+        teacherWorkRepository.save(tw);
+    }
+
 
     @Data
     public static class TeacherWorkDTO {

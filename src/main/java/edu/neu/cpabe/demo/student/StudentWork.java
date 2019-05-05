@@ -33,7 +33,6 @@ public class StudentWork {
 
     private Date submitTime;
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

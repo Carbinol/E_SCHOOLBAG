@@ -1,6 +1,7 @@
 package edu.neu.cpabe.demo.teacher;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import edu.neu.cpabe.demo.course.Course;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -21,6 +22,9 @@ public class TeacherWork {
     private Teacher teacher;
 
     private String policy;
+
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Course.class)
+    private Course course;
 
     @Column(columnDefinition = "TEXT")
     private String encContent;
