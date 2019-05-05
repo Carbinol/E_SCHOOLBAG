@@ -35,6 +35,12 @@ public class StudentController {
         return student.getCourses();
     }
 
+    /**
+     * 查询课程下所有的题目
+     * @param courseId
+     * @param student
+     * @return
+     */
     @GetMapping("/courses/{courseId}/teacherWork")
     @PreAuthorize("hasRole('STUDENT')")
     public List<TeacherWork> findTeacherWork(@PathVariable String courseId,

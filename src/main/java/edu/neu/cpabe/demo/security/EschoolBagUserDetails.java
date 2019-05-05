@@ -6,6 +6,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
+/**
+ * 用户信息
+ */
 public class EschoolBagUserDetails extends User implements UserDetails {
 
     private static final long serialVersionUID = 3679731990944546341L;

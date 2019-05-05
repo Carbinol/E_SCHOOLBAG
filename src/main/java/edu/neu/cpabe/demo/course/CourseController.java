@@ -19,6 +19,12 @@ public class CourseController {
         this.courseRepository = courseRepository;
     }
 
+    /**
+     * 查询课程下所有学生
+     *
+     * @param courseId 课程id
+     * @return
+     */
     @GetMapping("/{courseId}/students")
     @PreAuthorize("hasRole('TEACHER')")
     public List<Student> findByCourseId(@PathVariable String courseId) {
