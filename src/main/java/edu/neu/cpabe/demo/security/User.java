@@ -13,6 +13,7 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name = "SYS_USER")
+@Access(AccessType.FIELD)
 public class User implements Serializable {
 
     private static final long serialVersionUID = 9192751259398918318L;

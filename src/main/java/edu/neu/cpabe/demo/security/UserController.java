@@ -4,6 +4,9 @@ import edu.neu.cpabe.demo.student.Student;
 import edu.neu.cpabe.demo.student.StudentRepository;
 import edu.neu.cpabe.demo.teacher.Teacher;
 import edu.neu.cpabe.demo.teacher.TeacherRepository;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -69,5 +72,25 @@ public class UserController {
         }
         return userRepository.save(user);
     }
+
+
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class UserDTO {
+
+        private String username;
+
+        private String password;
+
+        private String email;
+
+        private String role;
+
+        private String roleId;
+
+    }
+
 
 }

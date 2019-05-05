@@ -2,6 +2,7 @@ package edu.neu.cpabe.demo.teacher;
 
 import edu.neu.cpabe.demo.course.Course;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +22,7 @@ public class TeacherController {
     }
 
     @GetMapping("/{teacherId}/courses")
+    @PreAuthorize("hasAuthority('ROLE_TEACHER')")
     private List<Course> findCourses(@PathVariable String teacherId) {
         log.debug("teacherId = {}", teacherId);
         Teacher teacher = teacherRepository.findByTeacherId(teacherId).orElseThrow(
