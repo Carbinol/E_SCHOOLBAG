@@ -1,4 +1,4 @@
-package edu.neu.cpabe.demo.security;
+package edu.neu.cpabe.demo.users;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import edu.neu.cpabe.demo.student.Student;

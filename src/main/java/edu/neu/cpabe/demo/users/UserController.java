@@ -1,4 +1,4 @@
-package edu.neu.cpabe.demo.security;
+package edu.neu.cpabe.demo.users;
 
 import edu.neu.cpabe.demo.student.Student;
 import edu.neu.cpabe.demo.student.StudentRepository;

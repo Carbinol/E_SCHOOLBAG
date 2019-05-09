@@ -1,5 +1,6 @@
 package edu.neu.cpabe.demo.student;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import edu.neu.cpabe.demo.course.Course;
 import lombok.Data;
 import org.hibernate.annotations.NaturalId;
@@ -36,6 +37,7 @@ public class Student implements Serializable {
     private String attribute;
 
     @ManyToMany
+    @JsonIgnore
     private List<Course> courses;
 
     @Override

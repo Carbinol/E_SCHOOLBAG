@@ -1,5 +1,6 @@
 package edu.neu.cpabe.demo.student;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import edu.neu.cpabe.demo.teacher.TeacherWork;
 import lombok.Data;
 
@@ -30,7 +31,8 @@ public class StudentWork {
 
     @Column(columnDefinition = "TEXT")
     private String remark;
-
+    
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ", locale = "zh", timezone = "GMT+8")
     private Date submitTime;
 
     @Override

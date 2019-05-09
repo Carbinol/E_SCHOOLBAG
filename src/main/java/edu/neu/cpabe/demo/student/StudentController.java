@@ -19,8 +19,11 @@ public class StudentController {
 
     private final TeacherWorkRepository teacherWorkRepository;
 
-    public StudentController(TeacherWorkRepository teacherWorkRepository) {
+    private final StudentRepository studentRepository;
+
+    public StudentController(TeacherWorkRepository teacherWorkRepository, StudentRepository studentRepository) {
         this.teacherWorkRepository = teacherWorkRepository;
+        this.studentRepository = studentRepository;
     }
 
     /**
@@ -32,7 +35,7 @@ public class StudentController {
     @GetMapping("/courses")
     @PreAuthorize("hasRole('STUDENT')")
     public List<Course> findCourses(@AuthenticationPrincipal(expression = "student") Student student) {
-        return student.getCourses();
+        return studentRepository.findByStudentId(student.getStudentId()).get().getCourses();
     }
 
     /**
@@ -45,7 +48,7 @@ public class StudentController {
     @PreAuthorize("hasRole('STUDENT')")
     public List<TeacherWork> findTeacherWork(@PathVariable String courseId,
                                              @AuthenticationPrincipal(expression = "student") Student student) {
-        List<Course> courses = student.getCourses();
+        List<Course> courses = studentRepository.findByStudentId(student.getStudentId()).get().getCourses();
         Course c = courses.stream().filter(v -> v.getCourseId().equals(courseId))
                 .findFirst().orElseThrow(() -> new IllegalArgumentException("没有选择此课程"));
         return teacherWorkRepository.findByCourseAndDeadlineAfter(c, new Date());

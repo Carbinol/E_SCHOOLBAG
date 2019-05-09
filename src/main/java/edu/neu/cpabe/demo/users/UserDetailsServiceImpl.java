@@ -1,4 +1,4 @@
-package edu.neu.cpabe.demo.security;
+package edu.neu.cpabe.demo.users;
 
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.userdetails.UserDetails;

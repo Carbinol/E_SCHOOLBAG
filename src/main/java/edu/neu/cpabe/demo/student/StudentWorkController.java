@@ -34,7 +34,7 @@ public class StudentWorkController {
      */
     @GetMapping("/{teacherWorkId}")
     @PreAuthorize("hasRole('TEACHER')")
-    public ResponseEntity<?> findStudentWork(@AuthenticationPrincipal Teacher teacher,
+    public ResponseEntity<?> findStudentWork(@AuthenticationPrincipal(expression = "teacher") Teacher teacher,
                                              @PathVariable Long teacherWorkId) {
         List<TeacherWork> teacherWork = teacherWorkRepository.findByTeacher(teacher);
         if (teacherWork.isEmpty()) throw new IllegalArgumentException("未找到题目");
@@ -52,10 +52,10 @@ public class StudentWorkController {
      * @param scoreDTO
      * @return
      */
-    @PostMapping("/score/{studentWorkId}")
+    @PutMapping("/score/{studentWorkId}")
     @PreAuthorize("hasRole('TEACHER')")
     public ResponseEntity<?> score(@PathVariable Long studentWorkId,
-                                   @AuthenticationPrincipal Teacher teacher,
+                                   @AuthenticationPrincipal(expression = "teacher") Teacher teacher,
                                    @RequestBody ScoreDTO scoreDTO) {
         StudentWork studentWork = studentWorkRepository.findById(studentWorkId)
                 .orElseThrow(() -> new IllegalArgumentException("未找到该作业"));
@@ -78,7 +78,7 @@ public class StudentWorkController {
      */
     @PostMapping
     @PreAuthorize("hasRole('STUDENT')")
-    public ResponseEntity<?> uploadStudentWork(@AuthenticationPrincipal Student student,
+    public ResponseEntity<?> uploadStudentWork(@AuthenticationPrincipal(expression = "student") Student student,
                                                @RequestBody StudentWorkUploadDTO dto) {
         TeacherWork t = teacherWorkRepository.findById(dto.getTeacherWorkId())
                 .orElseThrow(() -> new IllegalArgumentException("无此题目"));
@@ -100,7 +100,7 @@ public class StudentWorkController {
      */
     @GetMapping
     @PreAuthorize("hasRole('STUDENT')")
-    public ResponseEntity<?> findStudentWork(@AuthenticationPrincipal Student student) {
+    public ResponseEntity<?> findStudentWork(@AuthenticationPrincipal(expression = "student")  Student student) {
         return ResponseEntity.ok(studentWorkRepository.findByStudent(student));
     }
 
@@ -113,7 +113,7 @@ public class StudentWorkController {
      */
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('STUDENT')")
-    public ResponseEntity<?> modifyStudentWork(@AuthenticationPrincipal Student student,
+    public ResponseEntity<?> modifyStudentWork(@AuthenticationPrincipal(expression = "student") Student student,
                                                @RequestBody StudentWorkUploadDTO dto,
                                                @PathVariable Long id) {
         List<StudentWork> submitted = studentWorkRepository.findByStudent(student);
@@ -130,8 +130,6 @@ public class StudentWorkController {
 
     @Data
     public static class StudentWorkUploadDTO {
-
-        private Long id;
 
         private String content;
 

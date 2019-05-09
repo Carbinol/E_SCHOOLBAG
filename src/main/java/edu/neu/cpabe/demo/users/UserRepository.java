@@ -1,4 +1,4 @@
-package edu.neu.cpabe.demo.security;
+package edu.neu.cpabe.demo.users;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

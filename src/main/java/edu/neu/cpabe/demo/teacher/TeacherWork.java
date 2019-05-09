@@ -26,6 +26,8 @@ public class TeacherWork {
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = Course.class)
     private Course course;
 
+    private String title;
+
     @Column(columnDefinition = "TEXT")
     private String encContent;
 
@@ -52,6 +54,7 @@ public class TeacherWork {
         private String policy;
         private String encContent;
         private Date deadline;
+        private String title;
 
         private TeacherWorkBuilder() {
         }
@@ -67,6 +70,11 @@ public class TeacherWork {
 
         public TeacherWorkBuilder withPolicy(String policy) {
             this.policy = policy;
+            return this;
+        }
+
+        public TeacherWorkBuilder withTitle(String title) {
+            this.title = title;
             return this;
         }
 
@@ -86,6 +94,7 @@ public class TeacherWork {
             teacherWork.setPolicy(policy);
             teacherWork.setEncContent(encContent);
             teacherWork.setDeadline(deadline);
+            teacherWork.setTitle(title);
             return teacherWork;
         }
     }
