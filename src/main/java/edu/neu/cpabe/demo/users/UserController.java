@@ -7,11 +7,16 @@ import edu.neu.cpabe.demo.teacher.TeacherRepository;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 
 /**
  * 用户端点
@@ -73,6 +78,19 @@ public class UserController {
         return userRepository.save(user);
     }
 
+    @PutMapping
+    @PreAuthorize("hasRole('USER')")
+    public User modifyUser(@RequestBody UserDTO dto,
+                           @AuthenticationPrincipal EschoolBagUserDetails eschoolBagUserDetails) {
+        User user = userRepository.findByName(eschoolBagUserDetails.getUsername()).get();
+        if (StringUtils.isNotBlank(dto.getPassword())) {
+            user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        }
+        if (StringUtils.isNotBlank(dto.getEmail())) {
+            user.setEmail(dto.getEmail());
+        }
+        return userRepository.save(user);
+    }
 
 
     @Data
