@@ -57,6 +57,7 @@ public class TeacherWorkController {
             dto.setDeadline(DateFormatUtils.format(v.getDeadline(),"yyyy-MM-dd"));
             dto.setPolicy(v.getPolicy());
             dto.setTitle(v.getTitle());
+            dto.setTeacherWorkId(v.getId());
             return dto;
         }).collect(toList());
     }
@@ -86,6 +87,8 @@ public class TeacherWorkController {
 
     @Data
     public static class TeacherWorkDTO {
+
+        private Long teacherWorkId;
 
         private String teacherId;
 
