@@ -19,14 +19,15 @@ public class ExampleTest {
     static String decfile;
 
 
-    static String policy = "math:good physics:good chemical:medium 2of3 biology:bad 1of2";
+    static String policy = "math:good physics:good chemical:medium biology:bad 2of2 1of3 character:teacher 1of2";
 
 
-    static String student1_attr = "chinese:bad math:good english:medium "
-            + "physics:good chemical:good biology:medium";
+    //static String student1_attr = "chinese:bad math:bad english:medium "
+    //        + "physics:bad chemical:medium biology:bad";
+    static String student1_attr = "character:teacher";
 
     static String student2_attr = "chinese:good math:bad english:medium "
-            + "physics:good chemical:good biology:good";
+            + "physics:bad chemical:good biology:good";
 
 
     @Test
@@ -79,7 +80,12 @@ public class ExampleTest {
         decfile = dir + "/output2.pdf";
 
         println("//start to dec");
-        test.dec(pubfile, prvfile, encfile, decfile);
+        try{
+            test.dec(pubfile, prvfile, encfile, decfile);
+        }
+        catch (NullPointerException e){
+            e.printStackTrace();
+        }
         println("//end to dec");
     }
 

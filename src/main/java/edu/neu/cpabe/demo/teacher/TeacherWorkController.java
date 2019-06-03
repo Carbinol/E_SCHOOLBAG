@@ -4,6 +4,7 @@ import edu.neu.cpabe.demo.course.Course;
 import edu.neu.cpabe.demo.course.CourseRepository;
 import edu.neu.cpabe.demo.encrypt.DemoEncryptUtilImpl;
 import lombok.Data;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 @RestController
 @RequestMapping("/teachers/work")
@@ -45,8 +48,17 @@ public class TeacherWorkController {
 
     @GetMapping
     @PreAuthorize("hasRole('TEACHER')")
-    public List<TeacherWork> findTeacherWork(@AuthenticationPrincipal(expression = "teacher") Teacher teacher) {
-        return teacherWorkRepository.findByTeacher(teacher);
+    public List<TeacherWorkDTO> findTeacherWork(@AuthenticationPrincipal(expression = "teacher") Teacher teacher) {
+        return teacherWorkRepository.findByTeacher(teacher).stream().map(v->{
+            TeacherWorkDTO dto = new TeacherWorkDTO();
+            dto.setTeacherId(v.getTeacher().getTeacherId());
+            dto.setContent(v.getEncContent());
+            dto.setCourseId(v.getCourse().getCourseId());
+            dto.setDeadline(DateFormatUtils.format(v.getDeadline(),"yyyy-MM-dd"));
+            dto.setPolicy(v.getPolicy());
+            dto.setTitle(v.getTitle());
+            return dto;
+        }).collect(toList());
     }
 
     @PutMapping("/{teacherWorkId}")
